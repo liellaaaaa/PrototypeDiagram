@@ -10,11 +10,11 @@ interface StatsCardsProps {
 
 export function StatsCards({ stats }: StatsCardsProps) {
   const cards = [
-    { label: '等待中', value: stats.waiting, valueColor: 'text-gray-600', borderColor: 'border-gray-200' },
-    { label: '生成中', value: stats.processing, valueColor: 'text-yellow-600', borderColor: 'border-yellow-200' },
-    { label: '已取消', value: stats.cancelled, valueColor: 'text-gray-500', borderColor: 'border-gray-200' },
-    { label: '已完成', value: stats.completed, valueColor: 'text-green-600', borderColor: 'border-green-200' },
-    { label: '失败', value: stats.failed, valueColor: 'text-red-600', borderColor: 'border-red-200' }
+    { label: '等待中', value: stats.waiting, valueColor: 'text-gray-600', borderColor: 'border-l-4 border-gray-400' },
+    { label: '生成中', value: stats.processing, valueColor: 'text-yellow-600', borderColor: 'border-l-4 border-yellow-400' },
+    { label: '已取消', value: stats.cancelled, valueColor: 'text-gray-500', borderColor: 'border-l-4 border-gray-300' },
+    { label: '已完成', value: stats.completed, valueColor: 'text-green-600', borderColor: 'border-l-4 border-green-500' },
+    { label: '失败', value: stats.failed, valueColor: 'text-red-600', borderColor: 'border-l-4 border-red-500' }
   ];
 
   return (
@@ -22,7 +22,7 @@ export function StatsCards({ stats }: StatsCardsProps) {
       {cards.map((card, index) => (
         <div
           key={index}
-          className={`bg-white border ${card.borderColor} rounded-lg p-6 text-center`}
+          className={`bg-white ${card.borderColor} rounded-lg p-6 text-center`}
         >
           <div className={`text-3xl mb-2 font-semibold ${card.valueColor}`}>{card.value}</div>
           <div className="text-sm text-gray-600">{card.label}</div>
