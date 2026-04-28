@@ -58,7 +58,9 @@ export function TranscodingTable({ tasks }: TranscodingTableProps) {
             <th className="px-4 py-3 text-left text-gray-600">进度</th>
             <th className="px-4 py-3 text-left text-gray-600">创建时间</th>
             <th className="px-4 py-3 text-left text-gray-600">完成时间</th>
-            <th className="px-4 py-3 text-left text-gray-600">原始大小-转码后-压缩比</th>
+            <th className="px-4 py-3 text-left text-gray-600">原始大小</th>
+            <th className="px-4 py-3 text-left text-gray-600">转码后</th>
+            <th className="px-4 py-3 text-left text-gray-600">压缩比</th>
             <th className="px-4 py-3 text-left text-gray-600">操作</th>
           </tr>
         </thead>
@@ -75,11 +77,9 @@ export function TranscodingTable({ tasks }: TranscodingTableProps) {
               <td className="px-4 py-3 text-gray-600">
                 {task.completedAt || '-'}
               </td>
-              <td className="px-4 py-3 text-gray-600">
-                {task.originalSize && task.transcodedSize && task.compressionRatio
-                  ? `${task.originalSize}-${task.transcodedSize}-${task.compressionRatio}`
-                  : '-'}
-              </td>
+              <td className="px-4 py-3 text-gray-600">{task.originalSize || '-'}</td>
+              <td className="px-4 py-3 text-gray-600">{task.transcodedSize || '-'}</td>
+              <td className="px-4 py-3 text-gray-600">{task.compressionRatio || '-'}</td>
               <td className="px-4 py-3">
                 <button className="text-blue-600 hover:text-blue-800 text-xs">
                   详情
