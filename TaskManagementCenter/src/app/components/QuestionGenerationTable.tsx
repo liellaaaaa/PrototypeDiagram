@@ -21,6 +21,33 @@ export function QuestionGenerationTable({ tasks, onTaskClick }: QuestionGenerati
     );
   };
 
+  const getProgressBar = (status: QuestionGenerationTask['status']) => {
+    if (status === '已完成') {
+      return (
+        <div className="w-24 bg-green-200 rounded-full h-2">
+          <div className="bg-green-500 h-2 rounded-full" style={{ width: '100%' }}></div>
+        </div>
+      );
+    } else if (status === '处理中') {
+      return (
+        <div className="w-24 bg-yellow-200 rounded-full h-2">
+          <div className="bg-yellow-500 h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>
+        </div>
+      );
+    } else if (status === '失败') {
+      return (
+        <div className="w-24 bg-red-200 rounded-full h-2">
+          <div className="bg-red-500 h-2 rounded-full" style={{ width: '30%' }}></div>
+        </div>
+      );
+    }
+    return (
+      <div className="w-24 bg-gray-200 rounded-full h-2">
+        <div className="bg-gray-400 h-2 rounded-full" style={{ width: '10%' }}></div>
+      </div>
+    );
+  };
+
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
       <div className="overflow-x-auto">
@@ -29,12 +56,11 @@ export function QuestionGenerationTable({ tasks, onTaskClick }: QuestionGenerati
             <tr>
               <th className="px-4 py-3 text-left text-gray-600 font-medium">序号</th>
               <th className="px-4 py-3 text-left text-gray-600 font-medium">任务标题</th>
-              <th className="px-4 py-3 text-left text-gray-600 font-medium">关联文件</th>
-              <th className="px-4 py-3 text-left text-gray-600 font-medium">任务状态</th>
+              <th className="px-4 py-3 text-left text-gray-600 font-medium">状态</th>
+              <th className="px-4 py-3 text-left text-gray-600 font-medium">进度</th>
               <th className="px-4 py-3 text-left text-gray-600 font-medium">创建时间</th>
               <th className="px-4 py-3 text-left text-gray-600 font-medium">完成时间</th>
-              <th className="px-4 py-3 text-left text-gray-600 font-medium">处理时长</th>
-              <th className="px-4 py-3 text-left text-gray-600 font-medium">生成数量</th>
+              <th className="px-4 py-3 text-left text-gray-600 font-medium">生成题数</th>
               <th className="px-4 py-3 text-left text-gray-600 font-medium">操作</th>
             </tr>
           </thead>
@@ -50,26 +76,13 @@ export function QuestionGenerationTable({ tasks, onTaskClick }: QuestionGenerati
                     {task.taskTitle}
                   </button>
                 </td>
-                <td className="px-4 py-3">
-                  <div className="flex flex-wrap gap-1 max-w-xs">
-                    {task.knowledgeBase.map((file, index) => (
-                      <span
-                        key={index}
-                        className="inline-block px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs"
-                        title={file}
-                      >
-                        {file}
-                      </span>
-                    ))}
-                  </div>
-                </td>
                 <td className="px-4 py-3">{getStatusBadge(task.status)}</td>
+                <td className="px-4 py-3">{getProgressBar(task.status)}</td>
                 <td className="px-4 py-3 text-gray-600">{task.createdAt}</td>
                 <td className="px-4 py-3 text-gray-600">
                   {task.completedAt || '-'}
                 </td>
-                <td className="px-4 py-3 text-gray-600">{task.processingTime}</td>
-                <td className="px-4 py-3 text-center font-medium">{task.generatedCount}</td>
+                <td className="px-4 py-3 text-center font-medium">{task.generatedCount ?? '-'}</td>
                 <td className="px-4 py-3">
                   <button
                     onClick={() => onTaskClick(task)}

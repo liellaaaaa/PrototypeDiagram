@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { StatsCards } from './StatsCards';
 import { QuestionGenerationTable } from './QuestionGenerationTable';
 import { TaskDetailModal } from './TaskDetailModal';
 import type { QuestionGenerationTask } from './QuestionGenerationTask';
 
 export function QuestionGenerationDashboard() {
-  const [activeTab, setActiveTab] = useState<'tasks' | 'history'>('tasks');
+  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [dateFilter, setDateFilter] = useState<string>('');
   const [selectedTask, setSelectedTask] = useState<QuestionGenerationTask | null>(null);
 
   const stats = {
@@ -162,36 +163,38 @@ export function QuestionGenerationDashboard() {
     }
   ];
 
+  const filteredTasks = useMemo(() => {
+    return tasks.filter(task => {
+      if (statusFilter && task.status !== statusFilter) return false;
+      if (dateFilter && !task.createdAt.startsWith(dateFilter)) return false;
+      return true;
+    });
+  }, [tasks, statusFilter, dateFilter]);
+
   return (
     <div>
-      {/* 页面标题 */}
-      <div className="mb-6">
-        <h2 className="text-xl font-medium text-gray-900">试题生成管理</h2>
-        <p className="text-sm text-gray-500 mt-1">管理试题生成任务，查看任务状态与结果</p>
-      </div>
-
-      {/* 三级Tab：生成任务 / 历史记录 */}
-      <div className="mb-6 flex gap-2">
-        <button
-          onClick={() => setActiveTab('tasks')}
-          className={`px-5 py-2 rounded-t-lg text-sm font-medium transition-colors ${
-            activeTab === 'tasks'
-              ? 'bg-blue-500 text-white'
-              : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-          }`}
+      {/* 筛选框 */}
+      <div className="mb-6 flex items-center gap-4">
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          生成任务
-        </button>
-        <button
-          onClick={() => setActiveTab('history')}
-          className={`px-5 py-2 rounded-t-lg text-sm font-medium transition-colors ${
-            activeTab === 'history'
-              ? 'bg-blue-500 text-white'
-              : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-          }`}
+          <option value="">全部状态</option>
+          <option value="已完成">已完成</option>
+          <option value="处理中">处理中</option>
+          <option value="失败">失败</option>
+        </select>
+        <select
+          value={dateFilter}
+          onChange={(e) => setDateFilter(e.target.value)}
+          className="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          历史记录
-        </button>
+          <option value="">全部时间</option>
+          <option value="2026-04-27">今天</option>
+          <option value="2026-04-26">昨天</option>
+          <option value="2026-04-25">前天</option>
+        </select>
       </div>
 
       {/* 统计卡片 */}
@@ -199,7 +202,7 @@ export function QuestionGenerationDashboard() {
 
       {/* 任务表格 */}
       <div className="mt-6">
-        <QuestionGenerationTable tasks={tasks} onTaskClick={setSelectedTask} />
+        <QuestionGenerationTable tasks={filteredTasks} onTaskClick={setSelectedTask} />
       </div>
 
       {/* 任务详情弹窗 */}
